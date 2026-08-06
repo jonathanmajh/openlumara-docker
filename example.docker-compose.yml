@@ -1,0 +1,31 @@
+services:
+  openlumara:
+    # Use the image built by your GitHub Actions workflow...
+    image: ghcr.io/jonathanmajh/openlumara:latest
+    # ...or, if you'd rather build locally from the Dockerfile instead of
+    # pulling a prebuilt image, comment out `image:` above and uncomment this:
+    # build:
+    #   context: .
+    #   args:
+    #     OPENLUMARA_REF: main
+
+    container_name: openlumara
+    restart: unless-stopped
+
+    ports:
+      - "3000:3000"
+
+    volumes:
+      - openlumara_data:/app/data
+      - openlumara_config:/app/config.yaml
+
+    # Uncomment if you're pointing OpenLumara at an OpenAI-compatible API
+    # (llamacpp, ollama, koboldcpp, etc) running on your host machine.
+    # Then use http://host.docker.internal:<port> as the API URL in the
+    # WebUI's settings panel.
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"   # needed on Linux; no-op on macOS/Windows
+
+volumes:
+  openlumara_data:
+  openlumara_config:
