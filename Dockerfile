@@ -3,6 +3,9 @@
 # needs to live in this repo.
 FROM python:3.11-slim
 
+# COPY the Docker CLI binary directly from the official docker image
+COPY --from=docker:cli /usr/local/bin/docker /usr/local/bin/
+
 # which branch/tag/commit to build from
 ARG OPENLUMARA_REF=main
 
@@ -34,10 +37,7 @@ ENV PYTHONUNBUFFERED=1
 # force network_mode "internet" (binds 0.0.0.0) below.
 EXPOSE 3000
 
-# Manually create a config.yml that enables webui listening on 0.0.0.0
-# --channels.enabled webui  -> only run the WebUI (skip the interactive CLI
-#                               channel, which has no real terminal in a container)
-# --channels.settings.webui.network_mode internet -> bind 0.0.0.0 instead of localhost
-RUN echo "channels:\n  enabled:\n    - webui\n  settings:\n    webui:\n      network_mode: internet\n      port: 3000\n" > /app/config.yml
+# Create a minimal config.yml file that enables webui, network_mode internet, unsafe-shell
+RUN echo "channels:\n  enabled:\n    - webui\n  settings:\n    webui:\n      network_mode: internet\n      port: 3000\nmodules:\n  enabled:\n  - unsafe_shell" > /app/config.yml
 
 ENTRYPOINT ["python", "main.py"]

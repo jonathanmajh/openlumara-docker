@@ -16,8 +16,12 @@ services:
       - "3000:3000"
 
     volumes:
-      - openlumara_data:/app/data
-      - openlumara_config:/app/config.yaml
+      - ./openlumara-data:/app/data
+      - ./config.yml:/app/config.yml
+    # uncomment if you want OpenLumara to use the sandboxed-shell
+    # unsafe-shell is already enabled 
+    # technically unsafe-shell is safer since docker socket gives access to host machine
+      # - /var/run/docker.sock:/var/run/docker.sock
 
     # Uncomment if you're pointing OpenLumara at an OpenAI-compatible API
     # (llamacpp, ollama, koboldcpp, etc) running on your host machine.
@@ -25,7 +29,3 @@ services:
     # WebUI's settings panel.
     # extra_hosts:
     #   - "host.docker.internal:host-gateway"   # needed on Linux; no-op on macOS/Windows
-
-volumes:
-  openlumara_data:
-  openlumara_config:
