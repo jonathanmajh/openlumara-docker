@@ -34,12 +34,10 @@ ENV PYTHONUNBUFFERED=1
 # force network_mode "internet" (binds 0.0.0.0) below.
 EXPOSE 3000
 
-# Force the app to initialize and dump the default config.yml into the image
-RUN python main.py --help || true
+# Manually create a config.yml that enables webui listening on 0.0.0.0
 # --channels.enabled webui  -> only run the WebUI (skip the interactive CLI
 #                               channel, which has no real terminal in a container)
 # --channels.settings.webui.network_mode internet -> bind 0.0.0.0 instead of localhost
-CMD ["python", "main.py", \
-     "--channels.enabled", "webui", \
-     "--channels.settings.webui.network_mode", "internet", \
-     "--channels.settings.webui.port", "3000"]
+RUN echo "channels:\n  enabled:\n    - webui\n  settings:\n    webui:\n      network_mode: internet\n      port: 3000\n" > /app/config.yml
+
+ENTRYPOINT ["python", "main.py"]
