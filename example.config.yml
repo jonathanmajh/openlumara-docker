@@ -1,0 +1,207 @@
+core:
+  data_folder: data
+  auto_resume_chats: true
+  cmd_prefix: /
+  tool_timeout: 15
+api:
+  url: http://host.docker.internal:5001/v1
+  key: openlumara-dummy-key
+  max_context: 130000
+  max_output_tokens: 81920
+  max_messages: 200
+  use_developer_role: false
+  custom_fields: {}
+model:
+  name: ''
+  temperature: 0.7
+  use_tools: true
+  enable_thinking: true
+  keep_reasoning_in_context: true
+  only_preserve_reasoning_for_current_agentic_loop: true
+  reasoning_effort: none
+channels:
+  enabled:
+  - webui
+  disabled:
+  - cli
+  - api_bridge
+  - cli_lite
+  - discord
+  - logger
+  - matrix
+  - ntfy
+  - simple_webui
+  - telegram
+  - turn_grouping_test
+  settings:
+    cli_lite:
+      show_reasoning: false
+    logger:
+      path: lumara.log
+    ntfy:
+      server: http://localhost:3050
+      topic: openlumara
+      title: OpenLumara
+    turn_grouping_test: {}
+    api_bridge:
+      network_mode: local
+      custom_host: null
+      port: 8000
+      api_key_required: false
+      api_key: sk-openlumara-dummy-key
+      show_reasoning: false
+      stream_tool_calls: false
+    cli:
+      show_reasoning: false
+      stream_tool_calls: false
+    webui:
+      network_mode: internet
+      custom_host: null
+      port: 3000
+      allow_admin_commands: true
+      enable_chat_header: true
+      enable_title: true
+      title: OpenLumara
+      enable_chat_titlebar: false
+      enable_streaming_state_display: true
+      enable_sidebar: true
+      show_unsafe_settings: false
+      require_login: false
+      username: admin
+      password: admin
+      login_lifetime: 30
+user_channels:
+  path: user_channels
+  enabled: []
+  disabled: []
+  settings: {}
+modules:
+  enabled:
+  - auto_backup
+  - calculator
+  - calendar
+  - channel
+  - chats
+  - docs
+  - identity
+  - lists
+  - memory
+  - models
+  - modules
+  - notes
+  - scheduler
+  - time
+  - token_threshold
+  - tutorial
+  - writing_style
+  disabled:
+  - characters
+  - coder
+  - config
+  - file_manager
+  - http
+  - replacer
+  - sandboxed_shell
+  - unsafe_shell
+  - web_reader
+  - web_search
+  settings:
+    auto_backup:
+      backup_interval_days: 7
+      backup_path: data_backups
+      enable_notifications: true
+    calendar:
+      insert_system_prompt: true
+      range: 7
+      include_past_events: false
+      notifications: true
+      notification_channel: webui
+      notification_window: 30
+    channel:
+      enable_tutorial_prompts: true
+    characters:
+      insert_system_prompt: true
+      disable_agent_prompts_when_character_active: true
+      use_writing_style: true
+    chats:
+      insert_system_prompt: true
+    config:
+      put_config_in_system_prompt: false
+      allow_ai_to_modify_config: false
+    docs:
+      folders:
+      - openlumara_docs
+      insert_system_prompt: true
+    file_manager:
+      put_system_info_in_prompt: false
+    http:
+      block_uncommon_ports: true
+      block_local_network_access: true
+      https_only: true
+      domain_whitelist: []
+      domain_blacklist: []
+    lists:
+      insert_system_prompt: true
+      max_pinned_lists: 10
+    memory:
+      insert_nudge_prompt: false
+      put_pinned_memories_in_system_prompt: true
+      max_pinned_memories: 20
+    models:
+      insert_current_model_into_system_prompt: true
+      insert_available_models_into_system_prompt: false
+    modules:
+      insert_system_prompt: true
+      allow_ai_to_toggle: false
+    replacer:
+      replacements: {}
+    sandboxed_shell:
+      internet_access: false
+      read_only: true
+      persistent_data: true
+      sandbox_path: ~/sandbox
+      temporary_filesystem_size_limit: 512m
+      execution_timeout: 10
+      output_limit: 2000
+      cpu_limit: 0.5
+      memory_limit: 512m
+      max_processes: 10
+      image: python:3.11-slim
+      run_as_user: ''
+    scheduler:
+      notification_channel: webui
+      insert_system_prompt: true
+      prompt_strategy: system prompt + instruction
+      allow_recurring_jobs: true
+    time:
+      method: message injection
+      add_timezone: true
+      timezone: local
+      date_format: '%c'
+    token_threshold:
+      warning_threshold: 0.8
+    unsafe_shell: {}
+    writing_style:
+      writing_style: default
+      writing_flair: null
+      custom_writing_flair: null
+      writing_length: default
+      vocabulary_level: default
+      emoji_style: default
+      capitalization_style: default
+      list_style: default
+      forbid_em_dash: false
+      forbid_relentless_praise: false
+      forbid_negative_parallelism: false
+      forbid_markdown: false
+      forbid_headers: false
+      forbid_tables: false
+      mood: default
+      custom_mood: null
+      desire: default
+      custom_desire: null
+user_modules:
+  path: user_modules
+  enabled: []
+  disabled: []
+  settings: {}

@@ -1,6 +1,6 @@
 services:
   openlumara:
-    # Use the image built by your GitHub Actions workflow...
+    # Use the image built by GitHub Actions
     image: ghcr.io/jonathanmajh/openlumara:latest
     # ...or, if you'd rather build locally from the Dockerfile instead of
     # pulling a prebuilt image, comment out `image:` above and uncomment this:

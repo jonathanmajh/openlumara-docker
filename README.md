@@ -2,7 +2,7 @@
 
 Daily automated Docker image builds for [OpenLumara](https://github.com/Rose22/openlumara), a modular, token-efficient AI agent framework.
 
-This repository contains only a `Dockerfile` and CI workflow — the actual OpenLumara source is cloned fresh from upstream during each build, so you always get the latest `main` branch without needing to maintain a fork.
+This repository contains only a `Dockerfile` and CI workflow — the actual OpenLumara source is cloned fresh from upstream during each build.
 
 ## Quick Start
 
@@ -24,11 +24,11 @@ Then open http://localhost:3000 in your browser.
 ### Or use docker-compose
 
 ```bash
-# Edit docker-compose.yml to set your username
+# Edit docker-compose.yml 
 docker compose up -d
 ```
 
-See [docker-compose.yml](./docker-compose.yml) for volume setup and options.
+See [example.docker-compose.yml](./example.docker-compose.yml) for volume setup and options.
 
 ## Configuration
 
@@ -38,88 +38,23 @@ Once the container starts, open the WebUI, click the settings gear in the top-ri
 - **API Key** — your provider's API key
 - **Model** — which model to use
 
-If you're running a local LLM on your host machine, use `http://host.docker.internal:<port>` as the API URL (already configured in the compose example).
+If you're running a local LLM on your host machine, use `http://host.docker.internal:<port>` as the API URL
 
 ## Data Persistence
 
-Two Docker volumes persist across container restarts and image updates:
-
-- `openlumara_data` — chat history, memories, scheduled tasks
-- `openlumara_config` — API settings, module toggles, character definitions
-
-To wipe everything and start fresh:
-
-```bash
-docker compose down -v
-docker compose up -d
-```
-
-## Building Locally
-
-To build from the Dockerfile instead of pulling a prebuilt image:
-
-```bash
-docker build -t openlumara .
-docker run -d \
-  --name openlumara \
-  -p 3000:3000 \
-  -v openlumara_data:/app/data \
-  openlumara
-```
-
-Or with compose — uncomment the `build:` block in [docker-compose.yml](./docker-compose.yml) and comment out `image:`.
-
-## Customizing the Build
-
-### Change the OpenLumara branch/tag
-
-Edit the `Dockerfile`'s `ARG OPENLUMARA_REF=main` line:
-
-```dockerfile
-ARG OPENLUMARA_REF=v1.2.3  # or a specific commit hash
-```
-
-Or pass it at build time:
-
-```bash
-docker build --build-arg OPENLUMARA_REF=v1.2.3 -t openlumara .
-```
-
-### Force a fresh clone on every local build
-
-By default, Docker caches layers aggressively. To force a fresh clone and rebuild:
-
-```bash
-docker build --no-cache -t openlumara .
-```
+- `openlumara_data` — Docker Volume - chat history, memories, scheduled tasks
+- `./config.yml` — File Mount - API settings, module toggles, character definitions
 
 ## CI/CD
 
 This repo includes a GitHub Actions workflow that:
 
-- Runs **daily at 03:00 UTC** (configurable in [.github/workflows/build.yml](./.github/workflows/build.yml))
+- Runs **daily at 03:00 UTC**
 - Clones the latest OpenLumara `main` branch
 - Builds a fresh image and pushes to GitHub Container Registry
 - Tags images as `:latest` and `:N` (run number, for rollback)
 
 Can also be triggered manually from the **Actions** tab.
-
-### Prerequisites
-
-- Your GitHub repo must have **Actions enabled** (usually default)
-- If using a **private package**, ensure:
-  - Settings → Actions → General → **Workflow permissions** is set to "Read and write permissions"
-  - Anyone pulling the image needs a PAT with `read:packages` scope
-
-### Customize the schedule
-
-Edit [.github/workflows/build.yml](./.github/workflows/build.yml), line 8:
-
-```yaml
-- cron: '0 3 * * *'   # daily at 03:00 UTC
-```
-
-Use [cron.guru](https://cron.guru) to fiddle with the schedule.
 
 ## Troubleshooting
 
@@ -133,7 +68,7 @@ Make sure your OpenAI-compatible endpoint is actually running and accessible fro
 
 ### "Settings aren't saving"
 
-Check that the `openlumara_config` volume is actually mounted and writable:
+Check that the `./config.yml` volume is actually mounted and writable:
 
 ```bash
 docker inspect openlumara | grep -A 10 Mounts
