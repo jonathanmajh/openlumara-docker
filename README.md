@@ -32,13 +32,21 @@ See [example.docker-compose.yml](./example.docker-compose.yml) for volume setup 
 
 ## Configuration
 
-Once the container starts, open the WebUI, click the settings gear in the top-right, and configure:
-
-- **API Provider URL** — point to your LLM backend (OpenAI, local llamacpp/ollama/koboldcpp, etc)
-- **API Key** — your provider's API key
-- **Model** — which model to use
-
 If you're running a local LLM on your host machine, use `http://host.docker.internal:<port>` as the API URL
+
+In most cases a config.yml file should be mount for persistence and management.
+
+A minimal config.yml is generate within the container to turn on webui, network_mode: internet, unsafe_shell by default
+
+### Shell
+
+Since OpenLumara is in Docker the unsafe_shell is safer than the sandboxed_shell
+
+unsafe_shell uses `subprocess.run()` which will be within the container, isolated from host.
+
+sandboxed_shell requires podman / docker which means the host docker socket must be mounted within the container, giving full access to the host
+
+Docker CLI is included in the image if sandboxed_shell is to be used
 
 ## Data Persistence
 
